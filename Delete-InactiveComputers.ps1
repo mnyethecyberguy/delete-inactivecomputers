@@ -1,13 +1,21 @@
-﻿# Author:		Michael Nye
-# Date:         07-07-2014
-# Script Name:  Delete-InactiveComputers
-# Version:      1.0
-# Description:  Script to query for inactive computer objects in Active Directory and delete them.
-# Change Log:	v1.0:	Initial Release
+﻿<#
+    .SYNOPSIS
+    Script to query for inactive computer objects in Active Directory and delete them.
 
-# ------------------- NOTES -----------------------------------------------
-# 
+    .DESCRIPTION
+    Script to query for inactive computer objects in Active Directory and delete them.
 
+    .EXAMPLE
+
+    .NOTES
+    ###################################################################################################
+    # Author: Michael Nye - https://github.com/mnyethecyberguy                                        #
+    # Project: Delete-InactiveComputers - https://github.com/mnyethecyberguy/delete-inactivecomputers #
+    # Module Dependencies: ActiveDirectory                                                            #
+    # Permission level: Domain Admin                                                                  #
+    # Powershell v5 or greater                                                                        #
+    ###################################################################################################
+#>
 # -------------------------------------------------------------------------
 
 # ------------------- IMPORT AD MODULE (IF NEEDED) ------------------------
