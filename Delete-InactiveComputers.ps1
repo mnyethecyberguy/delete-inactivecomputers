@@ -46,6 +46,9 @@ $ErrorActionPreference = 'stop'
 # Set date for inactivity.  Will be compared against pwdLastSet and lastLogonTimeStamp attributes.  Today minus 60 days.
 $dateInactive   = (Get-Date).AddDays(-60).ToFileTimeUtc()
 
+# Set list of computer properties to pull
+$strCompProperties = 'cn','lastLogonTimestamp','pwdLastSet','whenCreated','whenChanged','sAMAccountName','DNSHostName','distinguishedName'
+
 # Create ldap query.
 # Requirements:
 #   1) pwdLastSet > 60 days
@@ -124,14 +127,18 @@ BeginScript
 # Collect Inactive Computers
 Try
 {
-    $arrInactiveComputers = Get-ADComputer -Server $strDomainFQDN -SearchBase $strOU -LDAPFilter $queryLdap
-    Writelog "**** Successfully collected inactive computers for the $strDomainFQDN domain - (count: $($arrInactiveComputers.Count))"
+    $arrTmpInactiveComputers = Get-ADComputer -Server $strDomainFQDN -SearchBase $strOU -LDAPFilter $queryLdap -Properties $strCompProperties | Select-Object $strCompProperties
+    Writelog "**** Successfully collected inactive computers for the $strDomainFQDN domain - (count: $($arrTmpInactiveComputers.Count))"
     Writelog "-------------------------------------------------------------------------------------"
 
     
-    ForEach ($computer in $arrInactiveComputers)
+    ForEach ($computer in $arrTmpInactiveComputers)
     {
+        $arrInactiveComputers += $computer
+        
         $computer | Remove-ADObject -Server $strDomainFQDN -Recursive -Confirm:$false
+
+        Writelog "**** Deleted $($computer.sAMAccountname)"
 
         $countSuccess++
     }
